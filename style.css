@@ -1,0 +1,12 @@
+ *{
+    font-family: system-ui
+  }
+  @media (prefers-color-scheme: dark) {
+  body{
+  	background-color: #323232;
+    color: white;
+  }
+    a{
+      color: rgb(83, 158, 250)
+    }
+}
