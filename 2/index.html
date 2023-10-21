@@ -1,7 +1,53 @@
 <title>
-  Quest Devblog 1
+  Quest Devblog 2
 </title>
 <link rel="stylesheet" type="text/css" href="../style.css">
 <body>
-  Content here...
+   10-22-2023
+    <p>
+      For the past two weeks, I was assigned two major tasks, both being battle attacks. In addition, I also addressed other aspects of the projects.
+    </p>
+  <strong>Convince Attack</strong>
+  <p>
+    The Convince attack has the player dodging walls that cross the screen from right to left. Each wall has a random height, and a hole in the middle for the player to pass through. 
+    It's meant to be a metaphor for bringing down barriers when convincing another person
+    of a position, as far as I can tell. Since we now have a fairly solid foundation for modeling battles, the implementation went fairly smoothlly. 
+     <img src="convince.png" style="width:100%; max-width:300px">
+    <figcaption>Screenshot of the WIP convince attack. We don't have a wall sprite, so I chose an approximately-shaped sprite we already had.</figcaption>
+    </figure>
+</p>
+  <p>
+    Our decision to implement battles inside of a UI Canvas is probably going to cause problems for us. I have already noticed inconsistent sprite sizes and player movement
+  speed across the different computers that I've used to work on the game, and it seems like it is tied to the DPI of the display. At the present moment, it is probably too
+  late to re-engineer battles to take place in a normal 2D scene rather than a canvas, but I will raise this concern at the next studio meeting. Needing to manually account for
+  DPI and operating system UI scale factors every single place we need them is going to create an endless supply of bugs, whereas in a normal 2D scene the resolution of the display
+  does not matter because everything happens in scene coordinates instead of pixels. 
+  </p>
+  <strong>Heal Attack</strong>
+  <p>
+    The heal "attack" allows the player to have a chance to regain lost health. It works by spawning flowers in random places on the board, and after a random interval the flowers
+    will burst petals. If the player touches a petal, then they regain 3 hp as according to the design doc. This was the first place where I decided to voluntarily use the EventBus. 
+    In the past, I defaulted to creating trees of objects, with backpointers to parents, so that information can be transmitted between objects, but this always became a mess
+    very quickly. Since the Heal minigame has three levels of object (the minigame, the flowers, and the petals), I decided to have the petals raise an EventBus message whenever the player
+    contacted them, and have the minigame recieve those events, applying a hp increase each time. 
+     <img src="heal.png" style="width:100%; max-width:300px">
+    <figcaption>Screenshot of the WIP heal attack, also using placeholder sprites.</figcaption>
+    </figure>
+    I'm sold on the EventBus paradigm. Not only does it make the code cleaner, but it also allowed me to use lambda capturing to enforce encapsulation even better. 
+  <pre>
+public override void Play(MiniGameInfo info)
+{
+    // [cut for brevity]
+    
+    collisionSub = EventBus.Subscribe<HealMiniGameFlowerPickup.Occurrence>((evt) =>
+    {
+        info.playerIcon.GetComponent<PlayerBattleHealth>().Heal(healAmountPerPickup);
+    });
+}
+</pre>
+          The subscriber to the event can capture the MiniGameInfo parameter in-place. This is very convienient because it means I do not need to create a member function that other code can
+          call by accident. Instead, the concerns are properly isolated. I think I will supply an EventBus as a first-party feature in my own game engine, though mine will need some
+          additional engineering in order to be thread safe and properly handle the fact that my engine moves data around in memory a lot, wheras Unity keeps objects in stable locations and
+          scripts are single threaded. 
+  </p>
 </body>
