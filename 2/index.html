@@ -13,7 +13,7 @@
     It's meant to be a metaphor for bringing down barriers when convincing another person
     of a position, as far as I can tell. Since we now have a fairly solid foundation for modeling battles, the implementation went fairly smoothlly. 
     <figure>
-      <img src="convince.png" style="width:100%; max-width:300px">
+      <img src="convince.png" style="width:100%; max-width:600px">
       <figcaption>Screenshot of the WIP convince attack. We don't have a wall sprite, so I chose an approximately-shaped sprite we already had.</figcaption>
     </figure>
 </p>
@@ -53,7 +53,7 @@
     very quickly. Since the Heal minigame has three levels of object (the minigame, the flowers, and the petals), I decided to have the petals raise an EventBus message whenever the player
     contacted them, and have the minigame recieve those events, applying a hp increase each time. 
     <figure>
-      <img src="heal.png" style="width:100%; max-width:300px">
+      <img src="heal.png" style="width:100%; max-width:600px">
       <figcaption>Screenshot of the WIP heal attack, also using placeholder sprites.</figcaption>
     </figure>
     I'm sold on the EventBus paradigm. Not only does it make the code cleaner, but it also allowed me to use lambda capturing to enforce encapsulation even better. 
