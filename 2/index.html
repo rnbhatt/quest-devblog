@@ -79,6 +79,10 @@ public override void Play(MiniGameInfo info)
             information about the rendering backend and enabled features. This overlay will help us diagnose problems in final builds, because it allows us to easily get a view of 
             the machine's configuration. It is also a lot easier to tell a tester to press F3 and take a screenshot than it is to ask them to look up and give us their specs. 
           </p>
+  <figure>
+      <img src="overlay.png" style="width:100%; max-width:600px">
+      <figcaption>Screenshot of the diagnostic screen overlay.</figcaption>
+    </figure>
   <strong>Build optimization</strong>
           <p>
             I made a few changes to our compile configuration to optimize performance in release builds. I switched the scripting backend to il2cpp and enabled link-time optimization, because
