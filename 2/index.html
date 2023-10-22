@@ -12,8 +12,9 @@
     The Convince attack has the player dodging walls that cross the screen from right to left. Each wall has a random height, and a hole in the middle for the player to pass through. 
     It's meant to be a metaphor for bringing down barriers when convincing another person
     of a position, as far as I can tell. Since we now have a fairly solid foundation for modeling battles, the implementation went fairly smoothlly. 
-     <img src="convince.png" style="width:100%; max-width:300px">
-    <figcaption>Screenshot of the WIP convince attack. We don't have a wall sprite, so I chose an approximately-shaped sprite we already had.</figcaption>
+    <figure>
+      <img src="convince.png" style="width:100%; max-width:300px">
+      <figcaption>Screenshot of the WIP convince attack. We don't have a wall sprite, so I chose an approximately-shaped sprite we already had.</figcaption>
     </figure>
 </p>
   <p>
@@ -23,6 +24,27 @@
   DPI and operating system UI scale factors every single place we need them is going to create an endless supply of bugs, whereas in a normal 2D scene the resolution of the display
   does not matter because everything happens in scene coordinates instead of pixels. 
   </p>
+  <p>
+    Edit: After the meeting today (10/22) we agreed that changing the battles to take place in world space is the way to go. However, we decided to delay that work for one week until after feature lock, 
+    so that we can reduce the chances of needing to redo work. The main changes that will need to happen are:
+    <ol>
+      <li>
+        Create a prefab (or a scene and use additive scene loading) that contains the battle arena, and place it on its own render layer
+      </li>
+      <li>
+        Change all the recttransforms to normal transforms
+      </li>
+      <li>
+        Change all of the UI Image elements to standard sprites
+      </li>
+      <li>
+        Change the amount that objects move in one frame, since UI pixel coordinates are a lot larger than world coordinates
+      </li>
+      <li>
+        To display the battle area, swap the active camera to the battle camera and disable the overworld camera
+      </li>
+    </ol>
+  </p>
   <strong>Heal Attack</strong>
   <p>
     The heal "attack" allows the player to have a chance to regain lost health. It works by spawning flowers in random places on the board, and after a random interval the flowers
@@ -30,8 +52,9 @@
     In the past, I defaulted to creating trees of objects, with backpointers to parents, so that information can be transmitted between objects, but this always became a mess
     very quickly. Since the Heal minigame has three levels of object (the minigame, the flowers, and the petals), I decided to have the petals raise an EventBus message whenever the player
     contacted them, and have the minigame recieve those events, applying a hp increase each time. 
-     <img src="heal.png" style="width:100%; max-width:300px">
-    <figcaption>Screenshot of the WIP heal attack, also using placeholder sprites.</figcaption>
+    <figure>
+      <img src="heal.png" style="width:100%; max-width:300px">
+      <figcaption>Screenshot of the WIP heal attack, also using placeholder sprites.</figcaption>
     </figure>
     I'm sold on the EventBus paradigm. Not only does it make the code cleaner, but it also allowed me to use lambda capturing to enforce encapsulation even better. 
   <pre>
@@ -39,9 +62,9 @@ public override void Play(MiniGameInfo info)
 {
     // [cut for brevity]
     
-    collisionSub = EventBus.Subscribe<HealMiniGameFlowerPickup.Occurrence>((evt) =>
+    collisionSub = EventBus.Subscribe&gt;HealMiniGameFlowerPickup.Occurrence&lt((evt) =>
     {
-        info.playerIcon.GetComponent<PlayerBattleHealth>().Heal(healAmountPerPickup);
+        info.playerIcon.GetComponent&gt;PlayerBattleHealth&lt;().Heal(healAmountPerPickup);
     });
 }
 </pre>
@@ -50,4 +73,18 @@ public override void Play(MiniGameInfo info)
           additional engineering in order to be thread safe and properly handle the fact that my engine moves data around in memory a lot, wheras Unity keeps objects in stable locations and
           scripts are single threaded. 
   </p>
+<strong>Diagnostics screen</strong>
+          <p>
+            I ported this script from Ragnarok TD. At any point in the game, pressing F3 will display a textual overlay containing the game's current frame rate, the physics tick rate, and
+            information about the rendering backend and enabled features. This overlay will help us diagnose problems in final builds, because it allows us to easily get a view of 
+            the machine's configuration. It is also a lot easier to tell a tester to press F3 and take a screenshot than it is to ask them to look up and give us their specs. 
+          </p>
+  <strong>Build optimization</strong>
+          <p>
+            I made a few changes to our compile configuration to optimize performance in release builds. I switched the scripting backend to il2cpp and enabled link-time optimization, because
+            this feature provides a performance uplift compared to mono essentially for free. The only downside is making final release builds takes a little bit longer, but to me that is a 
+            worthwhile tradeoff. I also disabled features we don't use and enabled the multithreaded render backend. Even though we are making a simple 2D game, I believe that performance
+            is still a top priority. Even if we end up capping the frame rate to the monitor refresh rate, reducing the amount of time the game spends performing computations will help reduce
+            our power consuption, enabling longer battery life on laptops. 
+          </p>
 </body>
