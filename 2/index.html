@@ -11,7 +11,7 @@
   <p>
     The Convince attack has the player dodging walls that cross the screen from right to left. Each wall has a random height, and a hole in the middle for the player to pass through. 
     It's meant to be a metaphor for bringing down barriers when convincing another person
-    of a position, as far as I can tell. Since we now have a fairly solid foundation for modeling battles, the implementation went fairly smoothlly. 
+    of a position, as far as I can tell. Since we now have a fairly solid foundation for modeling battles, the implementation went fairly smoothly. 
     <figure>
       <img src="convince.png" style="width:100%; max-width:600px">
       <figcaption>Screenshot of the WIP convince attack. We don't have a wall sprite, so I chose an approximately-shaped sprite we already had.</figcaption>
@@ -62,9 +62,9 @@ public override void Play(MiniGameInfo info)
 {
     // [cut for brevity]
     
-    collisionSub = EventBus.Subscribe&gt;HealMiniGameFlowerPickup.Occurrence&lt((evt) =>
+    collisionSub = EventBus.Subscribe&lt;HealMiniGameFlowerPickup.Occurrence&gt((evt) =>
     {
-        info.playerIcon.GetComponent&gt;PlayerBattleHealth&lt;().Heal(healAmountPerPickup);
+        info.playerIcon.GetComponent&lt;PlayerBattleHealth&gt;().Heal(healAmountPerPickup);
     });
 }
 </pre>
@@ -99,7 +99,7 @@ public override void Play(MiniGameInfo info)
         required to make this work, it's done purely with one CSS media query. 
       </li>
       <li>
-        Code blocks, created using &gt;pre&lt; tags, no longer force the entire page to scroll horizontally if they run over. Instead, the individual code blocks
+        Code blocks, created using &lt;pre&gt; tags, no longer force the entire page to scroll horizontally if they run over. Instead, the individual code blocks
         get their own scroll bars to scroll horizontally in-place. 
       </li>
     </ul>
