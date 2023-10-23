@@ -51,7 +51,7 @@
     will burst petals. If the player touches a petal, then they regain 3 hp as according to the design doc. This was the first place where I decided to voluntarily use the EventBus. 
     In the past, I defaulted to creating trees of objects, with backpointers to parents, so that information can be transmitted between objects, but this always became a mess
     very quickly. Since the Heal minigame has three levels of object (the minigame, the flowers, and the petals), I decided to have the petals raise an EventBus message whenever the player
-    contacted them, and have the minigame recieve those events, applying a hp increase each time. 
+    contacted them, and have the minigame receive those events, applying a hp increase each time. 
     <figure>
       <img src="heal.png" style="width:100%; max-width:600px">
       <figcaption>Screenshot of the WIP heal attack, also using placeholder sprites.</figcaption>
@@ -68,9 +68,9 @@ public override void Play(MiniGameInfo info)
     });
 }
 </pre>
-          The subscriber to the event can capture the MiniGameInfo parameter in-place. This is very convienient because it means I do not need to create a member function that other code can
+          The subscriber to the event can capture the MiniGameInfo parameter in-place. This is very convenient because it means I do not need to create a member function that other code can
           call by accident. Instead, the concerns are properly isolated. I think I will supply an EventBus as a first-party feature in my own game engine, though mine will need some
-          additional engineering in order to be thread safe and properly handle the fact that my engine moves data around in memory a lot, wheras Unity keeps objects in stable locations and
+          additional engineering in order to be thread safe and properly handle the fact that my engine moves data around in memory a lot, whereas Unity keeps objects in stable locations and
           scripts are single threaded. 
   </p>
 <strong>Diagnostics screen</strong>
@@ -115,10 +115,10 @@ public override void Play(MiniGameInfo info)
   </p>
   <strong>Playing the case study</strong>
   <p>
-    Like last time, my tasks did not take the entire 24 hours to complete, so I spent the remaining time researching by plaing the case study, Deltarune. Things I noticed:
+    Like last time, my tasks did not take the entire 24 hours to complete, so I spent the remaining time researching by playing the case study, Deltarune. Things I noticed:
     <ul>
       <li>
-        Most modern games automatically open menus for you if they expect you to do something. However, Deltarune does not do this. So for example, when Ralsei says to open the equpiment menu,
+        Most modern games automatically open menus for you if they expect you to do something. However, Deltarune does not do this. So for example, when Ralsei says to open the equipment menu,
         you are expected to remember how to do that. He doesn't even tell you the button to do it with. I understand that it is immersion-breaking for in-game
         characters to tell you to press buttons on your controller, so Breath of the Wild instead places an overlay on screen with a diagram telling you what 
         button to press. I think this is a good compromise (one Deltarune does not take) and I think we should consider taking the Breath of the Wild approach for Quest.  
