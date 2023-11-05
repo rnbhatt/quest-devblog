@@ -23,7 +23,7 @@
      <figcaption>Controlling the fightbox and its presentation</figcaption>
   </figure>
   <p>
-    Updating all the minigames was not difficult, but it was time-consuming and tedious. A few major changes needed to happen to each minigame:
+    Updating all the minigames was not difficult, but it was extremely time-consuming and tedious. A few major changes needed to happen to each minigame:
     <ol>
       <li>All RectTransforms needed to become Transforms</li>
       <li>All Images needed to become Sprites</li>
@@ -40,12 +40,13 @@
   Most of the minigames controlled their spawed objects entirely using code. However, one mingiame (the Calm attack) used unity animators. This one was
   less simple to update. I ended up re-creating the animation solely for the scale and iamge swap parts of it, while changing the falling part
   of the animation to code-driven, triggered by an animation event. This gave me more control over the objects than was possible with the animator. 
-    </p>
+
   <figure>
       <video src="negotiate.webm" controls></video>
       <figcaption>The Negotiate attack in action</figcaption>
     </figure>
-
+  I spread out my work on udating battle minigames over the full two-week period to keep myself sane. 
+      </p>
   <strong>Battle Hooks API</strong>
   <p>
     The UI and Narrative teams have expressed interest in having interludes during battles, to play dialog, cutscenes, or effects. Crucially, these
@@ -111,4 +112,44 @@ beginPlayerTurn.TryInvoke(() =&gt;
     I think I might add an additional script that is a generic Unity editor script, like the grader for this blog suggested, so that all objects
     in the game get the right material. 
   </p>
+
+    <table>
+  <caption>Total Time: 24 hr</caption>
+  <tr>
+    <th>Task</th>
+     <th>Programming</th>
+    <th>Communicating</th>
+     <th>Researching</th>
+    <th>Task Total</th>
+  </tr>
+  <tr>
+   <td>Meetings & Work Sessions</td>
+     <td>3h</td>
+     <td>4h</td>
+     <td>–</td>
+    <td>7h</td>
+  </tr>
+  <tr>
+   <td>Updating the Battle Minigames</td>
+     <td>10h</td>
+     <td>1h</td>
+     <td>–</td>
+    <td>11h</td>
+  </tr>
+<tr>
+   <td>Battle Hooks API</td>
+     <td>2h</td>
+     <td>1h</td>
+     <td>–</td>
+    <td>3h</td>
+  </tr>
+    <tr>
+   <td>LDtk post process</td>
+     <td>1h</td>
+     <td>1h</td>
+     <td>1h</td>
+    <td>3h</td>
+  </tr>
+ <tr>
+</table>
 </body>
