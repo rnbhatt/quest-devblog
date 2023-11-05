@@ -1,0 +1,55 @@
+<title>
+  Quest Devblog 3
+</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<body>
+   11-4-2023
+  <p>
+      For the past two weeks, I was assigned two major tasks. The first was to update all of the battle minigames to the new worldspace environment,
+    and the second was to implement a new battle hooks API so that the UI team can add animations or other effects that play alongside battles.
+    I also addressed some other minor aspects of the project.
+    </p>
+  <strong>Updating the Battle Minigames</strong>
+  <p>
+    The new battle minigame system takes place inside the main scene, rather than inside the canvas. We made this change because the canvas-based
+    system required the battle minigames to be aware of DPI scaling in order to properly function on all users' devices, and it must
+    respond to changes in that environment. For example, if the user plugs in an exteral display, or changes the UI scale factor
+    inside their OS settings, the game needs to rescale the battle system on the fly. With world-space battles, this is no longer an issue.
+    The camera projection matrix takes care of making everything the right size, so battles can now take place without needing to consider anything
+    about the user's display configuration. Switching to a battle is as simple as activating the battle camera and deactivating the level camera. 
+  </p>
+  <figure>
+      <video src="fightbox.webm" controls></video>
+     <figcaption>Controlling the fightbox and its presentation</figcaption>
+  </figure>
+  <p>
+    Updating all the minigames was not difficult, but it was time-consuming and tedious. A few major changes needed to happen to each minigame:
+    <ol>
+      <li>All RectTransforms needed to become Transforms</li>
+      <li>All Images needed to become Sprites</li>
+      <li>The fightbox itself needed to be composed of sprites rather than as UI image elements.</li>
+      <li>The minigame logic needed to make spawend objects a child of the fightbox world-space object rather than a canvas element</li>
+      <li>The speed at which objects traveled needed to be reduced to make sense in world-space coordinates</li>
+    </ol>
+  I took the opportunity to make some enhancements to the fightbox API. The script now defines an Extent, with function to set it and retrieve it. 
+  <figure>
+      <img src="fightbox.png" style="width:100%; max-width:300px">
+      <figcaption>Inspector control of the fightbox API</figcaption>
+    </figure>
+
+  Most of the minigames controlled their spawed objects entirely using code. However, one mingiame (the Calm attack) used unity animators. This one was
+  less simple to update. I ended up re-creating the animation solely for the scale and iamge swap parts of it, while changing the falling part
+  of the animation to code-driven, triggered by an animation event. This gave me more control over the objects than was possible with the animator. 
+    </p>
+  <figure>
+      <video src="negotiate.webm" controls></video>
+      <figcaption>The Negotiate attack in action</figcaption>
+    </figure>
+
+  <strong>Battle Hooks API</strong>
+  <p>
+    
+  </p>
+
+  <strong>LDTK Postprocess Hook</strong>
+</body>
