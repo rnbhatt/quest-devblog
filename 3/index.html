@@ -48,7 +48,49 @@
 
   <strong>Battle Hooks API</strong>
   <p>
-    
+    The UI and Narrative teams have expressed interest in having interludes during battles, to play dialog, cutscenes, or effects. Crucially, these
+    interludes will be unpredictable lengths. Therefore, I designed an API for the battle system to make adding these interludes easy. 
+  </p>
+  <p>
+    Because the interludes will need to play inline, I modified the battle system to allow pausing it and resuming it in a controlled fashion. Each hook is 
+    exposed as a UnityEvent with one parameter: a C# Action. Actions take no parameters and return nothing, but they can contain lambda functions
+    with capture state. To use a battle hook, one must connect their compatible function to the UnityEvent in the inspector, and inside that function,
+    do whatever they need to do, and invoke the Action when complete. The Action contains the next piece of the battle logic, effectively unpausing it. 
+  </p>
+  <p>
+    A BattleHook looks like this:
+    <pre>
+[Serializable]
+public class BattleHook : UnityEvent&lt;Action&gt; {
+    public void TryInvoke(Action e)
+    {
+        if (GetPersistentEventCount() > 0)
+        {
+            Invoke(e);
+        }
+        else
+        {
+            e();
+        }
+    }
+}
+    </pre>
+   <figure>
+      <img src="battlehooks.png" style="width:100%; max-width:300px">
+      <figcaption>Battle Hooks in the inspector</figcaption>
+    </figure>
+
+    Within the battle controller, it's used like this:
+  <pre>
+beginPlayerTurn.TryInvoke(() =&gt;
+   {
+      // battle logic here...
+    }
+);
+  </pre>
+  TryInvoke will invoke the event if any subsscribers exist. If none exist, then it invokes the Action itself, so that the battle doesn't softlock
+  if no overrides are bound. A more robust system would be able to handle multiple functions bound to the same event, since the current system
+  will cause multiple instances of the battle to occur if the Action is invoked multiple times, but we are unlikely to need such robustness in Project Quest.
   </p>
 
   <strong>LDTK Postprocess Hook</strong>
