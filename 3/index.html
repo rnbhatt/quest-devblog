@@ -13,7 +13,7 @@
   <p>
     The new battle minigame system takes place inside the main scene, rather than inside the canvas. We made this change because the canvas-based
     system required the battle minigames to be aware of DPI scaling in order to properly function on all users' devices, and it must
-    respond to changes in that environment. For example, if the user plugs in an exteral display, or changes the UI scale factor
+    respond to changes in that environment. For example, if the user plugs in an external display, or changes the UI scale factor
     inside their OS settings, the game needs to rescale the battle system on the fly. With world-space battles, this is no longer an issue.
     The camera projection matrix takes care of making everything the right size, so battles can now take place without needing to consider anything
     about the user's display configuration. Switching to a battle is as simple as activating the battle camera and deactivating the level camera. 
@@ -28,7 +28,7 @@
       <li>All RectTransforms needed to become Transforms</li>
       <li>All Images needed to become Sprites</li>
       <li>The fightbox itself needed to be composed of sprites rather than as UI image elements.</li>
-      <li>The minigame logic needed to make spawend objects a child of the fightbox world-space object rather than a canvas element</li>
+      <li>The minigame logic needed to make spawned objects a child of the fightbox world-space object rather than a canvas element</li>
       <li>The speed at which objects traveled needed to be reduced to make sense in world-space coordinates</li>
     </ol>
   I took the opportunity to make some enhancements to the fightbox API. The script now defines an Extent, with function to set it and retrieve it. 
@@ -38,14 +38,14 @@
     </figure>
 
   Most of the minigames controlled their spawed objects entirely using code. However, one mingiame (the Calm attack) used unity animators. This one was
-  less simple to update. I ended up re-creating the animation solely for the scale and iamge swap parts of it, while changing the falling part
+  less simple to update. I ended up re-creating the animation solely for the scale and image swap parts of it, while changing the falling part
   of the animation to code-driven, triggered by an animation event. This gave me more control over the objects than was possible with the animator. 
 
   <figure>
       <video src="negotiate.webm" controls></video>
       <figcaption>The Negotiate attack in action</figcaption>
     </figure>
-  I spread out my work on udating battle minigames over the full two-week period to keep myself sane. 
+  I spread out my work on updating battle minigames over the full two-week period to keep myself sane. 
       </p>
   <strong>Battle Hooks API</strong>
   <p>
@@ -89,7 +89,7 @@ beginPlayerTurn.TryInvoke(() =&gt;
     }
 );
   </pre>
-  TryInvoke will invoke the event if any subsscribers exist. If none exist, then it invokes the Action itself, so that the battle doesn't softlock
+  TryInvoke will invoke the event if any subscribers exist. If none exist, then it invokes the Action itself, so that the battle doesn't softlock
   if no overrides are bound. A more robust system would be able to handle multiple functions bound to the same event, since the current system
   will cause multiple instances of the battle to occur if the Action is invoked multiple times, but we are unlikely to need such robustness in Project Quest.
   </p>
@@ -108,7 +108,7 @@ beginPlayerTurn.TryInvoke(() =&gt;
     and apply it to every object that LDtk created. 
   </p>
   <p>
-    This approach worked, but it only runs when new data is exported from Ldtk, something which only works on that teammembers computer as of right now.
+    This approach worked, but it only runs when new data is exported from Ldtk, something which only works on that team member's computer as of right now.
     I think I might add an additional script that is a generic Unity editor script, like the grader for this blog suggested, so that all objects
     in the game get the right material. 
   </p>
