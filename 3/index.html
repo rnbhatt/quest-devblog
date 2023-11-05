@@ -93,5 +93,22 @@ beginPlayerTurn.TryInvoke(() =&gt;
   will cause multiple instances of the battle to occur if the Action is invoked multiple times, but we are unlikely to need such robustness in Project Quest.
   </p>
 
-  <strong>LDTK Postprocess Hook</strong>
+  <strong>LDtk Postprocess Hook</strong>
+  <p>
+    LDtk is the external level editor that we use for creating environments. It assigns the Sprites/Default material to objects exported
+    from it into Unity, which is a problem for us because of the tilemap edge-aliasing issue. We need the objects to have the PQSpriteMat material,
+    which enables the fix for edge-aliasing. We can't just fix it manually in Unity because LDtk replaces the objects each time it exports, so any
+    changes made in Unity would be lost. 
+  </p>
+  <p>
+    The recommendation from the LDtk Discord server was to add a LDTK post processing script to our Unity project. I pair-programmed with
+    the member that added Ldtk to our project to create this script. All that we needed to do was add a new script to the project that subclassed
+    from LDtkPostprocessor and overrides the OnPostprocessLevel function. Inside this function, we load the PQSpriteMat from the resources folder, 
+    and apply it to every object that LDtk created. 
+  </p>
+  <p>
+    This approach worked, but it only runs when new data is exported from Ldtk, something which only works on that teammembers computer as of right now.
+    I think I might add an additional script that is a generic Unity editor script, like the grader for this blog suggested, so that all objects
+    in the game get the right material. 
+  </p>
 </body>
