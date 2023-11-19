@@ -57,6 +57,10 @@
     of opacity. The object is then given a 3D rotation, which the camera orthographic projection matrix flattens during rendering. The end result is
     a shadow! These shadows make the level look far less flat. 
   </p>
+  <figure>
+      <img src="shadows-bts.webm" style="width:100%; max-width:600px">
+      <figcaption>A peek behind the curtain</figcaption>
+    </figure>
   <p>
     This shadow system is not perfect, though. It only works for static sprites. If an object has an animated sprite, then the shadow will keep the same 
     sprite that the caster had at the moment that the shadow was created, and will not update afterward. I don't believe that we will need this, but if we decide
