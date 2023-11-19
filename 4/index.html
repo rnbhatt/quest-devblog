@@ -1,0 +1,66 @@
+<title>
+  Quest Devblog 4
+</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<body>
+   11-19-2023
+
+    <p>
+      For the past two weeks, I worked on bug fixing and polishing tasks. 
+    </p>
+  <strong>Fixing Counterattack</strong>
+  <p>
+    In the Counterattack minigame, projectiles (currently <em>still</em> using the 
+    temporary axe sprite!) fire out from around the battle box, then fall inwards towards the player. The player must parry (hit the space key while moving in a direction)
+    three of the projectiles in order to win the minigame. If any of the projectiles collides with the player, or if the player does not parry three
+    projectiles before the timer runs out, the player loses the minigame. There's no penalty for losing minigames as far as I'm aware, but parrying fewer
+    than three projectiles means that the player deals less damage to the enemy.
+  </p>
+  <p>
+    For the entirety of the project thus far, the counterattack minigame was impossible to complete. The first issue was frame rate scaling. The minigame did not account
+    for the game's frame rate, so if the player was running without vsync enabled, the game would run far too quickly to be possible. I fixed this by moving the 
+    projectile logic from Update to FixedUpdate, and adding a RigidBody with interpolation enabled to ensure that it looked good at high frame rates. 
+  </p>
+  <p>
+    The second issue was that parrying the projectiles didn't work. No matter what the player
+    did, the projectiles would always hit the player and zero parries would register. There were two components to this issue. First, there was a bug
+    in the code that detected if a parry was successful. Physics.OverlapCircle takes a <em>world space</em> input coordinate, but we were passing a
+    local space coordinate. This part of the minigame never worked, even when it was in the canvas, so I suspect that whoever wrote this was not aware
+    of the coordinate space requirement. Second, the projectiles did not remove themselves from the scene after they were parried, meaning that 
+    they would always collide with the player. A simple Destroy call in the projectile collision detection fixed this. 
+  </p>
+  <p>
+    Now that this minigame is fixed, the game is now playable! Some balancing is still required. 
+  </p>
+  <strong>Shadow Rendering</strong>
+  <p>
+    At present, our game looks very flat. It is difficult to tell where objects are depthwise, and what objects are obstacles versus walkable terrain.
+    Our art team is currently fully stacked with work, so I decided to implement a system that automatically generates shadows for any sprite in 
+    the scene. 
+  </p>
+  <p>
+    The script is easy for our developers to use. Just attach it to any object that needs a shadow, and on Start, the script will create shadows for every
+    object and subobject of that object that has a SpriteRenderer. 
+  </p>
+  <figure>
+      <img src="shadows.png" style="width:100%; max-width:600px">
+      <figcaption>Shadows added to all of the market stands in the level</figcaption>
+    </figure>
+  <p>
+    I use some transform trickery that takes advantage of how we render 2D objects in scenes. We do not do per-pixel depth sorting, instead every object
+    is given a layer priority, and Unity renders objects according to their layer priority via the Painter's Algorithm. Objects cannot clip into other objects
+    in the third dimension. 
+    Therefore, I can take advantage of 3D transformations
+    without worrying about the shadow objects clipping through objects that are behind them. 
+  </p>
+  <p>
+    The shadow object has a SpriteRenderer which takes the same sprite image as the casting object. It then tints it transparent black, with a small amount 
+    of opacity. The object is then given a 3D rotation, which the camera orthographic projection matrix flattens during rendering. The end result is
+    a shadow! These shadows make the level look far less flat. 
+  </p>
+  <p>
+    This shadow system is not perfect, though. It only works for static sprites. If an object has an animated sprite, then the shadow will keep the same 
+    sprite that the caster had at the moment that the shadow was created, and will not update afterward. I don't believe that we will need this, but if we decide
+    that animated characters need to have shadows, then I will look into creating a dynamic shadowing system. 
+  </p>
+</body>
