@@ -67,11 +67,11 @@
     nicely illustrates the ugly side of weakly-coupled designs like the EventBus and GetAllComponents. That Destroy call could be coming from <em>anywhere</em>, and it's not clear what objects and responsibilities are owned by what. Sprinkle in a generous helping of
     referencing via the editor inspector (which is completely invisible to static analysis tools) and you can quite easily weave a multilayered, interconnected, and unsearchable noose to hang yourself with.
     Avoiding these footguns takes team-wide discipline and proper thought to how code should communicate. On projects like studio games
-    (or even in the commercial game industry) where it's a mad scramble start-to-finish to ship on time, proper code design often falls by the
+    (or even in the commercial game industry) where there are a lot of people people working on different parts of the codebase in parallel, proper code design often falls by the
     wayside. Once you're tangled in the spiderweb of your own creation, it's very difficult to break free. 
   </p>
   <p>
-    Despite this, I think the EventBus in particular has more positives than negatives. Even if the source of the Destroy call was from inside the event bus, being able to debug properly would at least tell me which event is responsible, greatly
+    Despite not being able to find this bug, I think the EventBus in particular has more positives than negatives. Even if the source of the Destroy call was from inside the event bus, being able to debug properly would at least tell me which event is responsible, greatly
     reducing the search area. 
     If anyone reading this knows tricks for finding the source of object destruction, <em>please</em> let me know. 
   </p>
