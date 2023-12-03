@@ -1,0 +1,47 @@
+<title>
+  Quest Devblog 5
+</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<body>
+   12-3-2023
+
+    <p>
+      For the past week, I worked on bug fixing and polishing tasks. 
+    </p>
+  <strong>Implementing Shadows</strong>
+  <p>
+    In the previous devblog, I introduced the technology behind rendering shadows for our game. 
+    I checked in the script, but I did not add the script to any of the objects in the scene
+    because I was unsure of how to integrate it with our external world design tool which overwrites
+    any changes made in Unity each time it exports. At the studio work session, I pair-programmed
+    with a member of the overworld team to ensure that they were implemented properly.
+  </p>
+  <p>
+    The scenes have two layers. The bottom layer is the result of importing tile data from
+    LDtk, the external tool, and on top of that are prefabs like houses, props, and NPCs, which
+    are placed manually and not connected to the external tool. For the latter, adding shadows
+    was simple, all I needed to do was add the script to the prefabs and then in all scenes that
+    they were present in, shadows appeared automatically.
+  </p>
+  <p>
+    The trees were also not particularly difficult, but it took me a while to figure out how they
+    worked in order to add shadows to them. These prefabs are connected to the external tool, but they
+    also have a randomizer script that runs on each import. From what I could gather by poking at it,
+    there is a base prefab named "Tree" that the LDtk importer uses as a stamp. Each instance of the stamp
+    is named "Tree-UUID", where UUID is a randomly generated UUID that is stable across imports. By modifying the base
+    prefab to add the shadow script, all of the stamp variants get shadows. It turned out that generating the shadows
+    on awake was a good idea, because it means that the shadows are always showing the correct sprite, regardless of what
+    the randomizer does. Otherwise, I would need to synchronize the randomizer script with the shadow script which may not be
+    trivial.
+    <figure>
+      <img src="shadows-forest.png" style="width:100%; max-width:600px">
+      <figcaption>The Forest with shadows applied</figcaption>
+    </figure>
+    We decided not to have shadows for the tiles, because this technique won't work for them. The tiled backgrounds get imported
+    as one object per tile type, which cover the whole area. The only way to add shadows would be to have the artists draw
+    shadowed variants of every single tile, which is out of scope for this project. 
+  </p>
+   
+  
+  <strong>Trying to debug disappearing objects</strong>
+</body>
