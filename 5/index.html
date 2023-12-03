@@ -1,5 +1,5 @@
 <title>
-  Quest Devblog 5
+  Quest Devblog 4
 </title>
 <link rel="stylesheet" type="text/css" href="../style.css">
 <body>
@@ -44,4 +44,37 @@
    
   
   <strong>Trying to debug disappearing objects</strong>
+  <p>
+    In the Counter Attack minigame, the player must successfully parry incoming projectiles to deal damage to the enemy. On the design
+    doc, the game does not end when a projectile hits the player. However, for some reason, after any of the projectiles hit the player,
+    all of the projectiles get destroyed. I attempted for quite a while to figure out why this was happening. 
+  </p>
+  <p>
+    Closed-source dependencies are one of the great satans of software development, and for good reason. None of the debugging tricks 
+    I use work on this particular problem with Unity. My first thought was to breakpoint inside OnDestroy, then use the call stack to
+    figure out where the destroy call was originating from. However, the resulting stack trace was completely useless, consisting solely of
+    the OnDestroy call and nothing else. In my own engine, my next trick would be to breakpoint inside of the object destruction mechanism
+    inside the engine itself, and use conditional breakpoints to filter for the specific objects that I want. I can Step In as deep as I want
+    into core engine internals and see exactly what the engine is doing at all levels. This works becuase I have all of the source code
+    for both the engine and all of its libraries, so I can generate debug symbols for them. But because Unity is closed-source 
+    (unless you have an enterprise license), this is impossible. I searched through forum posts and Reddit threads trying to find any
+    techniques people use to find these issues, and found nothing. The only useful advice I could find was to use symbol lookup to search for every call to Destroy 
+    and manually check <em>every single one</em> to find the responsible code. But even in a game as small as Project Quest, there are <em>hundreds</em>
+    of Destroy calls, and for the majority of them it's not obvious what purpose they serve just by looking at the code.
+  </p>
+  <p>
+    After banging my head against the wall with another programmer for a long time, we eventually gave up, and this bug is now a feature. This bug
+    nicely illustrates the ugly side of weakly-coupled designs like the EventBus and GetAllComponents. That Destroy call could be coming from <em>anywhere</em>, and it's not clear what objects and responsibilities are owned by what. Sprinkle in a generous helping of
+    referencing via the editor inspector (which is completely invisible to static analysis tools) and you can quite easily weave a multilayered, interconnected, and unsearchable noose to hang yourself with.
+    Avoiding these footguns takes team-wide discipline and proper thought to how code should communicate. On projects like studio games
+    (or even in the commercial game industry) where it's a mad scramble start-to-finish to ship on time, proper code design often falls by the
+    wayside. Once you're tangled in the spiderweb of your own creation, it's very difficult to break free. 
+  </p>
+  <p>
+    Even if the source of the Destroy call was from inside the event bus, being able to debug properly would at least tell me which event is responsible, greatly
+    reducing the search area. 
+    If anyone reading this knows tricks for finding the source of object destruction, <em>please</em> let me know. 
+  </p>
+
+  
 </body>
